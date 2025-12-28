@@ -29,7 +29,8 @@ function Index() {
 
   const navigate = Route.useNavigate();
   
-  const onSubmit = useCallback(() => {
+  const onSubmit = useCallback((data: FormDataProps) => {
+    localStorage.setItem("username", data.username);
     navigate({ to: '/posts' });
   }, [navigate]);
 
