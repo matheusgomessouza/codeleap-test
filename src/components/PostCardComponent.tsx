@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { getTimeAgo } from '../utils/time';
 import { MdDeleteForever } from "react-icons/md";
-import { PiNotePencilBold } from 'react-icons/pi';
+import { PiNotePencilBold, PiHeartFill } from 'react-icons/pi';
 
 type PostCardProps = {
   post: {
@@ -26,6 +26,7 @@ type PostCardProps = {
 
 export function PostCardComponent({post, currentTime, setIsDeleteModalOpen, setIsEditModalOpen, setPostToDelete, setPostToEdit}: PostCardProps) {
   const currentUsername = useMemo(() => localStorage.getItem('username'), [])
+  const [likes, setLikes] = useState<number>(0);
 
   return (
     <article
@@ -57,6 +58,21 @@ export function PostCardComponent({post, currentTime, setIsDeleteModalOpen, setI
           {post.content}
         </p>
       </div>
+      <div className="px-6 pb-6 flex items-center gap-2">
+        <button 
+          className="hover:opacity-80 transition-opacity cursor-pointer"
+          title="Like"
+          onClick={() => {
+            setLikes(likes + 1);
+          }}
+        >
+         <PiHeartFill className='fill-indigo-400' size={24} />
+         
+        </button>
+        <span className="text-gray-600 text-sm font-medium">
+          {`${likes} likes`}
+        </span>
+            </div>
     </article>
   )
 }
