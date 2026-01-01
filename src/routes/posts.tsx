@@ -122,7 +122,48 @@ function RouteComponent() {
             </div>
           </form>
         </article>
-
+        <article className='flex gap-2'>
+          <select 
+            className="border border-gray-400 rounded-lg px-4 py-2 text-sm  mb-4 font-bold"
+            onChange={(e) => {
+              const sortedPosts = [...posts];
+              if (e.target.value === 'latest') {
+                sortedPosts.sort((a, b) => 
+                  new Date(b.created_datetime || '').getTime() - new Date(a.created_datetime || '').getTime()
+                );
+              } else if (e.target.value === 'oldest') {
+                sortedPosts.sort((a, b) => 
+                  new Date(a.created_datetime || '').getTime() - new Date(b.created_datetime || '').getTime()
+                );
+              }
+              setPosts(sortedPosts);
+            }}
+          >
+            <option value="">Sort by</option>
+            <option value="latest">Latest</option>
+            <option value="oldest">Oldest</option>
+          </select>
+          <input
+            type="text"
+            placeholder="Search by username"
+            className="border border-gray-400 rounded-lg px-4 py-2 text-sm mb-4 w-full"
+            onChange={(e) => {
+              const searchTerm = e.target.value.toLowerCase();
+              if (searchTerm === '') {
+                getPosts().then(fetchedPosts => {
+                  setPosts(fetchedPosts.results);
+                });
+              } else {
+                getPosts().then(fetchedPosts => {
+                  const filtered = fetchedPosts.results.filter((post: Post) =>
+                    post.username.toLowerCase().includes(searchTerm)
+                  );
+                  setPosts(filtered);
+                });
+              }
+            }}
+          />
+        </article>
         <div className="space-y-6">
           {posts.map((post) => (
             <PostCardComponent 
